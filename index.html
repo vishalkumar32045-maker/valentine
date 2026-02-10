@@ -1,202 +1,101 @@
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>For Someone Special ❤️</title>
+<title>For You ❤️</title>
 
 <style>
-*{box-sizing:border-box}
-
 body{
 margin:0;
 height:100vh;
-background:black;
-font-family:sans-serif;
-overflow:hidden;
-color:white;
-}
-
-/* FULLSCREEN PLAYGROUND */
-.wrapper{
-position:relative;
-width:100%;
-height:100%;
 display:flex;
 justify-content:center;
 align-items:center;
+background:black;
+color:white;
+font-family:sans-serif;
+text-align:center;
 overflow:hidden;
 }
 
-/* CARD */
-.card{
-position:relative;
-text-align:center;
-background:rgba(255,255,255,0.12);
-backdrop-filter:blur(12px);
-padding:30px;
-border-radius:25px;
-box-shadow:0 0 30px rgba(0,0,0,0.6);
-z-index:5;
+.screen{
+display:none;
 }
 
-.card img{
-width:220px;
-border-radius:20px;
+.active{
+display:block;
 }
 
-#question{
-margin:15px 0;
-font-size:22px;
-}
-
-/* BUTTONS */
 button{
-padding:12px 30px;
-margin:10px;
+padding:12px 25px;
+margin-top:20px;
 font-size:18px;
 border:none;
-border-radius:30px;
+border-radius:25px;
 cursor:pointer;
-transition:0.25s;
-}
-
-#yesBtn{
-background:#ff0055;
+background:#ff2e63;
 color:white;
-box-shadow:0 0 15px #ff0055;
 }
 
 #noBtn{
 background:#333;
-color:white;
 position:absolute;
-left:50%;
-top:65%;
-transform:translate(-50%,-50%);
-}
-
-/* FINAL SCREEN */
-.final{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:black;
-display:none;
-justify-content:center;
-align-items:center;
-flex-direction:column;
-font-size:34px;
-text-align:center;
-z-index:20;
-}
-
-/* HEARTS */
-.heart{
-position:absolute;
-font-size:20px;
-animation:fall 4s linear infinite;
-}
-
-@keyframes fall{
-0%{transform:translateY(-10vh);opacity:1;}
-100%{transform:translateY(110vh);opacity:0;}
-}
-
-/* FIREWORK */
-.spark{
-position:absolute;
-font-size:28px;
-animation:spark 1s linear forwards;
-}
-
-@keyframes spark{
-0%{opacity:1;transform:scale(1);}
-100%{opacity:0;transform:scale(2);}
 }
 </style>
 </head>
 
 <body>
 
-<div class="wrapper">
+<div id="s1" class="screen active">
+<h1>Hey ❤️</h1>
+<button onclick="next(2)">Continue</button>
+</div>
 
-  <div class="card" id="card">
-    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
-    <div id="question">Will You Be My Valentine? ❤️</div>
-    <button id="yesBtn">YES 💖</button>
-    <button id="noBtn">NO 😏</button>
-  </div>
+<div id="s2" class="screen">
+<img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif" width="200">
+<h2>You make my day better 😌</h2>
+<button onclick="next(3)">Continue</button>
+</div>
 
-  <div class="final" id="finalScreen">
-    <img src="https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif" width="230">
-    <div>YAYYYY!!! ❤️</div>
-    <div>You Are My Valentine 💍</div>
-  </div>
+<div id="s3" class="screen">
+<h2>Can I ask you something important?</h2>
+<button onclick="next(4)">Yes</button>
+</div>
 
+<div id="s4" class="screen">
+<h1>Will you be my Valentine? ❤️</h1>
+<button onclick="final()">YES 💖</button>
+<button id="noBtn">NO</button>
+</div>
+
+<div id="s5" class="screen">
+<h1>YAYYYY ❤️</h1>
+<h2>You are my Valentine 💍</h2>
 </div>
 
 <script>
-const wrapper = document.querySelector(".wrapper");
-const noBtn = document.getElementById("noBtn");
-const yesBtn = document.getElementById("yesBtn");
-const card = document.getElementById("card");
-const finalScreen = document.getElementById("finalScreen");
 
-/* SAFE NO MOVEMENT */
-function moveNo(){
-  const wrapRect = wrapper.getBoundingClientRect();
-  const btnRect = noBtn.getBoundingClientRect();
-
-  const maxX = wrapRect.width - btnRect.width - 20;
-  const maxY = wrapRect.height - btnRect.height - 20;
-
-  const x = Math.random() * maxX;
-  const y = Math.random() * maxY;
-
-  noBtn.style.left = x + "px";
-  noBtn.style.top  = y + "px";
-
-  // YES grows
-  yesBtn.style.transform = "scale("+(1.1 + Math.random()*0.3)+")";
+function next(n){
+document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));
+document.getElementById("s"+n).classList.add("active");
 }
 
-/* ALL EVENTS */
-["mouseover","click","touchstart"].forEach(evt=>{
-  noBtn.addEventListener(evt,e=>{
-    e.preventDefault();
-    moveNo();
-  });
-});
+function final(){
+next(5);
+}
 
-/* YES CLICK */
-yesBtn.onclick = ()=>{
-  card.style.display="none";
-  finalScreen.style.display="flex";
+/* NO Button Escape */
+let no=document.getElementById("noBtn");
 
-  // FIREWORKS
-  setInterval(()=>{
-    const s=document.createElement("div");
-    s.className="spark";
-    s.innerHTML="✨";
-    s.style.left=Math.random()*100+"vw";
-    s.style.top=Math.random()*100+"vh";
-    document.body.appendChild(s);
-    setTimeout(()=>s.remove(),1000);
-  },180);
-};
+function move(){
+no.style.left=Math.random()*80+"vw";
+no.style.top=Math.random()*80+"vh";
+}
 
-/* HEART RAIN */
-setInterval(()=>{
-  const h=document.createElement("div");
-  h.className="heart";
-  h.innerHTML="❤️";
-  h.style.left=Math.random()*100+"vw";
-  h.style.fontSize=(15+Math.random()*20)+"px";
-  document.body.appendChild(h);
-  setTimeout(()=>h.remove(),4000);
-},250);
+no.addEventListener("mouseover",move);
+no.addEventListener("touchstart",move);
+
 </script>
 
 </body>
