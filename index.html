@@ -5,29 +5,38 @@
 <title>For Someone Special ❤️</title>
 
 <style>
+*{box-sizing:border-box}
 
-/* Background */
 body{
 margin:0;
 height:100vh;
-display:flex;
-justify-content:center;
-align-items:center;
 background:black;
 font-family:sans-serif;
 overflow:hidden;
 color:white;
 }
 
-/* Card */
+/* FULLSCREEN PLAYGROUND */
+.wrapper{
+position:relative;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+overflow:hidden;
+}
+
+/* CARD */
 .card{
+position:relative;
 text-align:center;
-background:rgba(255,255,255,0.1);
+background:rgba(255,255,255,0.12);
 backdrop-filter:blur(12px);
 padding:30px;
 border-radius:25px;
-box-shadow:0 0 25px rgba(0,0,0,0.5);
-z-index:2;
+box-shadow:0 0 30px rgba(0,0,0,0.6);
+z-index:5;
 }
 
 .card img{
@@ -40,15 +49,15 @@ margin:15px 0;
 font-size:22px;
 }
 
-/* Buttons */
+/* BUTTONS */
 button{
-padding:12px 28px;
+padding:12px 30px;
 margin:10px;
 font-size:18px;
 border:none;
 border-radius:30px;
 cursor:pointer;
-transition:0.3s;
+transition:0.25s;
 }
 
 #yesBtn{
@@ -61,11 +70,14 @@ box-shadow:0 0 15px #ff0055;
 background:#333;
 color:white;
 position:absolute;
+left:50%;
+top:65%;
+transform:translate(-50%,-50%);
 }
 
-/* Final Screen */
+/* FINAL SCREEN */
 .final{
-position:fixed;
+position:absolute;
 top:0;
 left:0;
 width:100%;
@@ -75,12 +87,12 @@ display:none;
 justify-content:center;
 align-items:center;
 flex-direction:column;
-font-size:35px;
+font-size:34px;
 text-align:center;
-z-index:10;
+z-index:20;
 }
 
-/* Hearts */
+/* HEARTS */
 .heart{
 position:absolute;
 font-size:20px;
@@ -89,121 +101,102 @@ animation:fall 4s linear infinite;
 
 @keyframes fall{
 0%{transform:translateY(-10vh);opacity:1;}
-100%{transform:translateY(100vh);opacity:0;}
+100%{transform:translateY(110vh);opacity:0;}
 }
 
-/* Firework spark */
+/* FIREWORK */
 .spark{
 position:absolute;
-font-size:30px;
+font-size:28px;
 animation:spark 1s linear forwards;
 }
 
 @keyframes spark{
-0%{opacity:1; transform:scale(1);}
-100%{opacity:0; transform:scale(2);}
+0%{opacity:1;transform:scale(1);}
+100%{opacity:0;transform:scale(2);}
 }
-
 </style>
 </head>
 
 <body>
 
-<div class="card">
+<div class="wrapper">
 
-<img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+  <div class="card" id="card">
+    <img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+    <div id="question">Will You Be My Valentine? ❤️</div>
+    <button id="yesBtn">YES 💖</button>
+    <button id="noBtn">NO 😏</button>
+  </div>
 
-<div id="question">Will You Be My Valentine? ❤️</div>
-
-<button id="yesBtn">YES 💖</button>
-<button id="noBtn">NO 😏</button>
-
-</div>
-
-<div class="final" id="finalScreen">
-
-<img src="https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif" width="230">
-
-<div>YAYYYY!!! ❤️</div>
-<div>You Are My Valentine 💍</div>
+  <div class="final" id="finalScreen">
+    <img src="https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif" width="230">
+    <div>YAYYYY!!! ❤️</div>
+    <div>You Are My Valentine 💍</div>
+  </div>
 
 </div>
 
 <script>
+const wrapper = document.querySelector(".wrapper");
+const noBtn = document.getElementById("noBtn");
+const yesBtn = document.getElementById("yesBtn");
+const card = document.getElementById("card");
+const finalScreen = document.getElementById("finalScreen");
 
-/* Elements */
-let card = document.querySelector(".card");
-let noBtn = document.getElementById("noBtn");
-let yesBtn = document.getElementById("yesBtn");
-
-/* NO Button Safe Escape */
+/* SAFE NO MOVEMENT */
 function moveNo(){
+  const wrapRect = wrapper.getBoundingClientRect();
+  const btnRect = noBtn.getBoundingClientRect();
 
-let maxX = window.innerWidth - noBtn.offsetWidth - 20;
-let maxY = window.innerHeight - noBtn.offsetHeight - 20;
+  const maxX = wrapRect.width - btnRect.width - 20;
+  const maxY = wrapRect.height - btnRect.height - 20;
 
-let x = Math.random() * maxX;
-let y = Math.random() * maxY;
+  const x = Math.random() * maxX;
+  const y = Math.random() * maxY;
 
-noBtn.style.left = x + "px";
-noBtn.style.top = y + "px";
+  noBtn.style.left = x + "px";
+  noBtn.style.top  = y + "px";
 
-/* YES grows */
-let scale = Math.random()*0.3 + 1.1;
-yesBtn.style.transform = "scale("+scale+")";
+  // YES grows
+  yesBtn.style.transform = "scale("+(1.1 + Math.random()*0.3)+")";
 }
 
-/* Desktop */
-noBtn.addEventListener("mouseover",moveNo);
-noBtn.addEventListener("click",(e)=>{
-e.preventDefault();
-moveNo();
-});
-
-/* Mobile */
-noBtn.addEventListener("touchstart",(e)=>{
-e.preventDefault();
-moveNo();
+/* ALL EVENTS */
+["mouseover","click","touchstart"].forEach(evt=>{
+  noBtn.addEventListener(evt,e=>{
+    e.preventDefault();
+    moveNo();
+  });
 });
 
 /* YES CLICK */
 yesBtn.onclick = ()=>{
+  card.style.display="none";
+  finalScreen.style.display="flex";
 
-card.style.display = "none";
+  // FIREWORKS
+  setInterval(()=>{
+    const s=document.createElement("div");
+    s.className="spark";
+    s.innerHTML="✨";
+    s.style.left=Math.random()*100+"vw";
+    s.style.top=Math.random()*100+"vh";
+    document.body.appendChild(s);
+    setTimeout(()=>s.remove(),1000);
+  },180);
+};
 
-document.getElementById("finalScreen").style.display="flex";
-
-/* Fireworks */
+/* HEART RAIN */
 setInterval(()=>{
-let spark=document.createElement("div");
-spark.innerHTML="✨";
-spark.className="spark";
-
-spark.style.left=Math.random()*100+"vw";
-spark.style.top=Math.random()*100+"vh";
-
-document.body.appendChild(spark);
-
-setTimeout(()=>spark.remove(),1000);
-
-},200);
-}
-
-/* Hearts Rain */
-setInterval(()=>{
-let heart=document.createElement("div");
-heart.innerHTML="❤️";
-heart.className="heart";
-
-heart.style.left=Math.random()*100+"vw";
-heart.style.fontSize=(Math.random()*25+15)+"px";
-
-document.body.appendChild(heart);
-
-setTimeout(()=>heart.remove(),4000);
-
+  const h=document.createElement("div");
+  h.className="heart";
+  h.innerHTML="❤️";
+  h.style.left=Math.random()*100+"vw";
+  h.style.fontSize=(15+Math.random()*20)+"px";
+  document.body.appendChild(h);
+  setTimeout(()=>h.remove(),4000);
 },250);
-
 </script>
 
 </body>
