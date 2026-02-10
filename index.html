@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>For Someone Special ❤️</title>
+
+<style>
+
+/* Background */
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+background:linear-gradient(270deg,#ff416c,#ff4b2b,#ff416c);
+background-size:600% 600%;
+animation:bgMove 10s infinite;
+font-family:sans-serif;
+overflow:hidden;
+color:white;
+}
+
+@keyframes bgMove{
+0%{background-position:0% 50%;}
+50%{background-position:100% 50%;}
+100%{background-position:0% 50%;}
+}
+
+/* Card */
+.card{
+text-align:center;
+background:rgba(255,255,255,0.1);
+backdrop-filter:blur(15px);
+padding:30px;
+border-radius:25px;
+box-shadow:0 0 25px rgba(0,0,0,0.3);
+z-index:2;
+}
+
+.card img{
+width:220px;
+border-radius:20px;
+}
+
+/* Question typing */
+#question{
+font-size:26px;
+margin:20px 0;
+min-height:40px;
+}
+
+/* Buttons */
+button{
+padding:12px 30px;
+margin:10px;
+font-size:18px;
+border:none;
+border-radius:30px;
+cursor:pointer;
+transition:0.3s;
+}
+
+#yesBtn{
+background:#ff0055;
+color:white;
+box-shadow:0 0 20px #ff0055;
+}
+
+#noBtn{
+background:#333;
+color:white;
+position:absolute;
+}
+
+/* Final Screen */
+.final{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+display:none;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-size:40px;
+text-align:center;
+}
+
+/* Hearts Rain */
+.heart{
+position:absolute;
+font-size:20px;
+animation:fall 4s linear infinite;
+}
+
+@keyframes fall{
+0%{transform:translateY(-10vh);opacity:1;}
+100%{transform:translateY(100vh);opacity:0;}
+}
+
+/* Firework spark */
+.spark{
+position:absolute;
+font-size:30px;
+animation:spark 1s linear forwards;
+}
+
+@keyframes spark{
+0%{opacity:1; transform:scale(1);}
+100%{opacity:0; transform:scale(2);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<img src="https://media.giphy.com/media/MDJ9IbxxvDUQM/giphy.gif">
+
+<div id="question"></div>
+
+<button id="yesBtn">YES 💖</button>
+<button id="noBtn">NO 😏</button>
+
+</div>
+
+<div class="final" id="finalScreen">
+
+<img src="https://media.giphy.com/media/3oz8xIsloV7zOmt81G/giphy.gif" width="230">
+
+<div>YAYYYY!!! ❤️</div>
+<div>You Are My Valentine 💍</div>
+
+</div>
+
+<script>
+
+/* Typing Romantic Story */
+let lines=[
+"Hey...",
+"I Wanted To Tell You Something ❤️",
+"You Are Very Special To Me 😌",
+"Will You Be My Valentine?"
+];
+
+let l=0,c=0;
+
+function type(){
+if(c<lines[l].length){
+document.getElementById("question").innerHTML+=lines[l][c];
+c++;
+setTimeout(type,60);
+}
+else{
+setTimeout(()=>{
+l++;
+c=0;
+if(l<lines.length){
+document.getElementById("question").innerHTML="";
+type();
+}
+},1500);
+}
+}
+type();
+
+/* NO Button Escape */
+let noBtn=document.getElementById("noBtn");
+let yesBtn=document.getElementById("yesBtn");
+
+function moveNo(){
+
+let x=Math.random()*(window.innerWidth-120);
+let y=Math.random()*(window.innerHeight-120);
+
+noBtn.style.left=x+"px";
+noBtn.style.top=y+"px";
+
+/* YES grows */
+let scale=Math.random()*0.4 + 1.2;
+yesBtn.style.transform="scale("+scale+")";
+}
+
+noBtn.addEventListener("mouseover",moveNo);
+noBtn.addEventListener("click",(e)=>{
+e.preventDefault();
+moveNo();
+});
+noBtn.addEventListener("touchstart",(e)=>{
+e.preventDefault();
+moveNo();
+});
+
+/* YES CLICK */
+yesBtn.onclick=()=>{
+
+document.getElementById("finalScreen").style.display="flex";
+
+/* Fireworks */
+setInterval(()=>{
+let spark=document.createElement("div");
+spark.innerHTML="✨";
+spark.className="spark";
+
+spark.style.left=Math.random()*100+"vw";
+spark.style.top=Math.random()*100+"vh";
+
+document.body.appendChild(spark);
+
+setTimeout(()=>spark.remove(),1000);
+
+},200);
+}
+
+/* Hearts Rain */
+setInterval(()=>{
+let heart=document.createElement("div");
+heart.innerHTML="❤️";
+heart.className="heart";
+
+heart.style.left=Math.random()*100+"vw";
+heart.style.fontSize=(Math.random()*25+15)+"px";
+
+document.body.appendChild(heart);
+
+setTimeout(()=>heart.remove(),4000);
+
+},250);
+
+</script>
+
+</body>
+</html>
